@@ -24,6 +24,7 @@ import {
 const app = new cdk.App();
 
 const email = app.node.tryGetContext("email");
+const forceEmailVerification = app.node.tryGetContext("force_email_verification");
 const pipelineDeployableRegions = app.node.tryGetContext("pipeline_deployable_regions");
 const nestedOU = [
     {
@@ -58,11 +59,13 @@ const nestedOU = [
 
 new AWSBootstrapKitLandingZoneStage(app, 'AWSBootstrapKit-LandingZone-Dev',{
   email,
+  forceEmailVerification,
   nestedOU,
 });
 
 new AWSBootstrapKitLandingZonePipelineStack(app, 'AWSBootstrapKit-LandingZone-PipelineStack', {
   email,
+  forceEmailVerification,
   pipelineDeployableRegions,
   nestedOU
 });
