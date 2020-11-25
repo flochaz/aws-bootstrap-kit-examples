@@ -11,7 +11,8 @@ export class LandingPageStage extends Stage {
     constructor(scope: Construct, id: string, props: StageProps) {
         super(scope, id, props);
 
-        new LandingPageStack(this, 'LandingPageStack', props);
+    
+        new LandingPageStack(this, 'LandingPageStack', {...props, stage: id.toLowerCase()});
     }
 }
 
@@ -52,7 +53,7 @@ export class LandingPagePipelineStack extends Stack{
             });
 
 
-        const AWS_PROFILE = 'cicd';
+        const AWS_PROFILE = 'mvpv3-cicd';
         if(!process.env.CODEBUILD_BUILD_ID) {
             config.credentials = new SharedIniFileCredentials({profile: AWS_PROFILE});
         }

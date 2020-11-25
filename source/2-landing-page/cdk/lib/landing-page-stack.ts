@@ -2,9 +2,17 @@ import { BlockPublicAccess, Bucket } from '@aws-cdk/aws-s3';
 import { BucketDeployment, Source } from '@aws-cdk/aws-s3-deployment';
 import {
   CloudFrontWebDistribution,
-  OriginAccessIdentity
+  OriginAccessIdentity,
+  ViewerCertificate
 } from '@aws-cdk/aws-cloudfront';
 import { Construct, Stack, StackProps, CfnOutput, Tags } from '@aws-cdk/core';
+import * as route53 from "@aws-cdk/aws-route53";
+import { CloudFrontTarget } from "@aws-cdk/aws-route53-targets";
+import * as bootstrapKit from "aws-bootstrap-kit/lib/index.js";
+import {
+  DnsValidatedCertificate,
+  CertificateValidation,
+} from "@aws-cdk/aws-certificatemanager";
 
 export class LandingPageStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -25,25 +33,54 @@ export class LandingPageStack extends Stack {
 
     const landingPageOAI = new OriginAccessIdentity(this, 'LandingPageOAI');
 
-    const landingPageWebDistribution = new CloudFrontWebDistribution(
-      this,
-      'LandingPageDistribution',
+
+    const rootDomain = "ilovemylocalfarmer.dev";
+    const serviceName = "landingpage";
+    const stage = 'dev';
+    const URL = `${serviceName}.${stage}.${rootDomain}`;
+
+    const delegatedHostedZone = new bootstrapKit.CrossAccountDNSDelegator(this, "subzoneDelegation", {
+      zoneName: URL,
+    });
+
+    const certificate = new DnsValidatedCertificate(this, "Certificate", {
+      hostedZone: delegatedHostedZone.hostedZone,
+      domainName: URL,
+      region: "us-east-1",
+      validation: CertificateValidation.fromDns(delegatedHostedZone.hostedZone),
+    });
+    certificate._enableCrossEnvironment
+
+    const viewerCertificate = ViewerCertificate.fromAcmCertificate(
+      certificate,
       {
-        originConfigs: [
-          {
-            s3OriginSource: {
-              s3BucketSource: landingPageBucket,
-              originAccessIdentity: landingPageOAI
-            },
-            behaviors: [
-              {
-                isDefaultBehavior: true
-              }
-            ]
-          }
-        ]
+        aliases: [URL],
       }
     );
+
+    const landingPageWebDistribution = new CloudFrontWebDistribution(this, 'LandingPageDistribution',
+    {
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: landingPageBucket,
+            originAccessIdentity: landingPageOAI
+          },
+          behaviors: [
+            {
+              isDefaultBehavior: true
+            }
+          ],
+        }
+      ],
+      viewerCertificate: viewerCertificate
+    });
+
+    new route53.ARecord(this, "Alias", {
+      zone: delegatedHostedZone.hostedZone,
+      recordName: URL,
+      target: route53.RecordTarget.fromAlias(new CloudFrontTarget(landingPageWebDistribution))
+    });
 
     new CfnOutput(this, 'LandingPageUrl', {
       value: landingPageWebDistribution.distributionDomainName
