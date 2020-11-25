@@ -41,6 +41,7 @@ export class LandingPagePipelineStack extends Stack{
                         cloudAssemblyArtifact,
                         subdirectory: 'source/3-landing-page-cicd/cdk',
                         installCommand: 'npm install && npm run build',
+                        synthCommand: 'npx cdk synth && grep -r staging.ilove ./cdk.out/*',
                         rolePolicyStatements: [
                             new PolicyStatement({
                                 actions: ['organizations:ListAccounts'],
