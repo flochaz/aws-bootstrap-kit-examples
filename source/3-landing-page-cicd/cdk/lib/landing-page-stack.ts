@@ -39,7 +39,7 @@ export class LandingPageStack extends Stack {
 
 
     const rootDomain = "ilovemylocalfarmer.dev";
-    const serviceName = "landingpage";
+    const serviceName = "landingpage2";
     const stage = props.stage;
     const URL = `${serviceName}.${stage}.${rootDomain}`;
 
