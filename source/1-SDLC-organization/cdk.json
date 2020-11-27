@@ -9,7 +9,7 @@
     "github_repo_name": "aws-bootstrap-kit-examples",
     "github_repo_branch": "main",
     "email": "florianchazal@gmail.com",
-    "domain_name": "ilovemylocalfarmer.dev",
+    "domain_name": "mvpv3awsbootstrapkit.com",
     "third_party_provider_dns_used": true,
     "pipeline_deployable_regions": [
       "us-east-1",
