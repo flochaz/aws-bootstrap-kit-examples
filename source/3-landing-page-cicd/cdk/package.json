@@ -30,7 +30,7 @@
     "@aws-cdk/core": "1.74.0",
     "@aws-cdk/pipelines": "1.74.0",
     "aws-sdk": "^2.783.0",
-    "aws-bootstrap-kit": "0.2.8",
+    "aws-bootstrap-kit": "aws-bootstrap-kit@0.2.8.jsii.tgz",
     "source-map-support": "^0.5.16"
   }
 }
