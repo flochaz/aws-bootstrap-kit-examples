@@ -8,6 +8,7 @@
     "github_alias": "flochaz",
     "github_repo_name": "aws-bootstrap-kit-examples",
     "github_repo_branch": "chazalf/dns",
-    "service_name": "landingpage"
+    "service_name": "landingpage",
+    "domain_name": "mvpv3awsbootstrapkit.com"
   }
 }
