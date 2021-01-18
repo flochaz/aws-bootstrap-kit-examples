@@ -127,6 +127,12 @@ Right now, the *Developer* user that you are using has no access to the CICD acc
 
     ![A shell interface with the aws configure sso --profile cicd command running](../../doc/landing-page-with-cicd-add-to-devopsengineers-group-17.png)
 
+1. Execute `npm install -g cdk-sso-sync`
+
+    > Right now the cdk cli is not SSO friendly so we use a small command line tool to synchronize SSO credential with standard aws cli credential so that cdk can use a SSO profile
+
+1. Execute `cdk-sso-sync cicd`
+
 </details>
 
 ### Step 2 - Customize the input parameters
@@ -149,7 +155,8 @@ aws --profile cicd secretsmanager create-secret --name GITHUB_TOKEN --secret-str
 
     * "github_alias": <YOUR_GITHUB_ALIAS>
     * "github_repo_name": <YOUR_GITHUB_REPOSITORY>,
-    * "github_repo_branch": <YOUR_GITHUB_BRANCH>
+    * "github_repo_branch": <YOUR_GITHUB_BRANCH>,
+    * (optional) "domain_name": <YOUR DOMAIN NAME> (If you setup a dns domain as part of your [SDLC Organization](../1-SDLC-organization/README.md) you can use it to expose your landing page. The `domain_name` variable with the same value as in `source/1-SDLC-organization/cdk.json` one.
 
 1. Push new changes to your repo
 ```
