@@ -9,8 +9,8 @@ const app = new cdk.App();
 new DNSInfrastructureStack(app, 'DevStageDnsStack', {stageName: 'dev'});
 
 
-// const pipelineStack = new DNSInfrastructurePipelineStack(app, 'DNSInfrastructurePipelineStack');
+const pipelineStack = new DNSInfrastructurePipelineStack(app, 'DNSInfrastructurePipelineStack');
 
-// // Respect cdk bootstrap policy insuring pipelines construct can't create more than what it needs for CI/CD pipeline creation
-// const permissionBoundaryArn = cdk.Fn.importValue('CICDPipelinePermissionsBoundaryArn');
-// cdk.Aspects.of(pipelineStack).add(new AddPermissionsBoundaryToRoles(permissionBoundaryArn));
+// Respect cdk bootstrap policy insuring pipelines construct can't create more than what it needs for CI/CD pipeline creation
+const permissionBoundaryArn = cdk.Fn.importValue('CICDPipelinePermissionsBoundaryArn');
+cdk.Aspects.of(pipelineStack).add(new AddPermissionsBoundaryToRoles(permissionBoundaryArn));
