@@ -424,6 +424,7 @@ Resources:
               - codepipeline:CreateCustomActionType
               - codepipeline:CreatePipeline
               - codepipeline:DeletePipeline
+              - codepipeline:StartPipelineExecution
               - codepipeline:DeleteWebhook
               - codepipeline:GetPipeline
               - codepipeline:GetPipelineState
@@ -619,6 +620,7 @@ Resources:
           - Effect: Allow
             Action:
               - organizations:ListAccounts
+              - organizations:ListTagsForResource
             Resource: "*"
           - Effect: Allow
             Action:
