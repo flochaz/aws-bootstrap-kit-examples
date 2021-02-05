@@ -64,7 +64,7 @@ export class DNSInfrastructurePipelineStack extends Stack {
             value: `https://${Stack.of(this).region}.console.aws.amazon.com/codesuite/codepipeline/pipelines/${pipeline.codePipeline.pipelineName}/view?region=${Stack.of(this).region}`,
         });
 
-        const AWS_PROFILE = "cicd";
+        const AWS_PROFILE = "mvpv3-cicd";
         if (!process.env.CODEBUILD_BUILD_ID) {
             config.credentials = new SharedIniFileCredentials({
                 profile: AWS_PROFILE,
