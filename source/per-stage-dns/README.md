@@ -51,7 +51,7 @@ This example is a simple CDK app enabling to create the public hosted zones in e
     ```
     npm ci
     npm run build
-    npm run cdk deploy DevStageDnsStack --  --profile dev
+    npm run cdk deploy DNS-Infrastructure --  --profile dev
     ```
 
 1. Delegate this dev domain to route53
@@ -78,11 +78,26 @@ This example is a simple CDK app enabling to create the public hosted zones in e
 
 ### 3. Deploy to stages through pipeline
 
-```
-npm run cdk deploy DNSInfrastructurePipelineStack --  --profile mvpv3-cicd
-```
+1. Build and Deploy the pipeline
+    ```
+    npm run cdk deploy DNSInfrastructurePipelineStack --  --profile mvpv3-cicd
+    ```
+1. Delegate this dev domain to route53
+    Go to your DNS provider and copy the NS records you got from 
+        
+    * your different deployed stack in each environment by going to SSO Login page > Staging or Prod Account ReadOnly access > AWS Console > Cloud Formation > DNS-Infrastructure > Outputs > NSrecords 
+    
+    * or running this command against each stage (if you configured your aws profile properly, `prod` is the one use in this example): `aws cloudformation describe-stacks --stack-name DNS-Infrastructure --query "Stacks[0].Outputs[?OutputKey=='NSrecords'].OutputValue" --output text --profile prod`
+
+1. Test the resolution with dig
 
 
-### 4. Delegate those domain to route53
+### 4. Use those domain in your app
 
-Go to your DNS provider and copy the NS records available eith
+1. You will need the coresponding zone id so we suggest that you create the same kind of mapping done in this app `cdk.json` but with the coresponding zoneId:
+    1. Get the zoneId from the different stages:
+        * your different deployed stack in each environment by going to SSO Login page > Staging or Prod Account ReadOnly access > AWS Console > Cloud Formation > DNS-Infrastructure > Outputs > HostedZoneId
+        * running this command for dev
+        ```
+        aws cloudformation describe-stacks --stack-name DNS-Infrastructure --query "Stacks[0].Outputs[?OutputKey=='HostedZoneId'].OutputValue" --output text --profile dev
+        ```

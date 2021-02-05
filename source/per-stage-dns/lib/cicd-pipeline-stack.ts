@@ -19,7 +19,7 @@ import { DNSInfrastructureStack } from "./dns-infrastructure-stack";
 export class DNSInfrastructureStage extends Stage {
     constructor(scope: Construct, id: string, props: StageProps) {
         super(scope, id, props);
-        new DNSInfrastructureStack(this, "DNSInfrastructureStack", {...props, stageName: id.toLowerCase()});
+        new DNSInfrastructureStack(this, "DNS-Infrastructure", {...props, stageName: id.toLowerCase()});
     }
 }
 

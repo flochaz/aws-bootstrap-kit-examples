@@ -20,5 +20,13 @@ export class DNSInfrastructureStack extends cdk.Stack {
         value: cdk.Fn.join(",", hostedZone.hostedZoneNameServers),
       });
     }
+
+    new cdk.CfnOutput(this, `HostedZoneId`, {
+      value: hostedZone.hostedZoneId,
+    });
+
+    new cdk.CfnOutput(this, `HostedZoneArn`, {
+      value: hostedZone.hostedZoneArn,
+    });
   }
 }
