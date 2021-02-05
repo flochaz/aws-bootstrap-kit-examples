@@ -44,7 +44,7 @@ export class DNSInfrastructurePipelineStack extends Stack {
                 sourceArtifact,
                 cloudAssemblyArtifact,
                 // If we are using the mono repo examples then adding the proper prefix
-                subdirectory: `${this.node.tryGetContext("github_repo_name") === 'aws-bootstrap-kit-examples' ? 'source/per-stage-dns' : ''}infrastructure`,
+                subdirectory: `${this.node.tryGetContext("github_repo_name") === 'aws-bootstrap-kit-examples' ? 'source/per-stage-dns/' : ''}infrastructure`,
                 buildCommand: "npm run build:all",
                 rolePolicyStatements: [
                     new PolicyStatement({

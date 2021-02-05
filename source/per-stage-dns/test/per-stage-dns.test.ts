@@ -1,13 +1,21 @@
-import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
-import * as PerStageDns from '../lib/dns-infrastructure-stack';
+import "@aws-cdk/assert/jest";
+import * as cdk from "@aws-cdk/core";
+import * as PerStageDns from "../lib/dns-infrastructure-stack";
 
-test('Empty Stack', () => {
-    const app = new cdk.App();
+test("Empty Stack", () => {
+    const app = new cdk.App({
+        context: {
+            stageDomainMapping: {
+                test: "dev-mycompany.com",
+            },
+        },
+    });
     // WHEN
-    const stack = new PerStageDns.DNSInfrastructureStack(app, 'MyTestStack', {stageName: 'test'});
+    const stack = new PerStageDns.DNSInfrastructureStack(app, "MyTestStack", {
+        stageName: "test",
+    });
     // THEN
-    expectCDK(stack).to(matchTemplate({
-      "Resources": {}
-    }, MatchStyle.EXACT))
+    expect(stack).toHaveResource("AWS::Route53::HostedZone", {
+        Name: "dev-mycompany.com.",
+    });
 });
