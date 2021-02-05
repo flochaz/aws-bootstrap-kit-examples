@@ -47,11 +47,33 @@ This example is a simple CDK app enabling to create the public hosted zones in e
 
 ### 2. Test it in dev
 
-```
-npm ci
-npm run build
-npm run cdk deploy DevStageDnsStack --  --profile dev
-```
+1. Build and Deploy
+    ```
+    npm ci
+    npm run build
+    npm run cdk deploy DevStageDnsStack --  --profile dev
+    ```
+
+1. Delegate this dev domain to route53
+    Go to your DNS provider and copy the NS records you got from previous command (`ns-1234.awsdns-56.org`, `ns-789.awsdns-01.com`, `ns-2345.awsdns-67.co.uk`, `ns-890.awsdns-12.net` in the following example)
+    ```
+    ✅  DevStageDnsStack
+
+    Outputs:
+    DevStageDnsStack.NSrecords = ns-1234.awsdns-56.org,ns-789.awsdns-01.com,ns-2345.awsdns-67.co.uk,ns-890.awsdns-12.net
+    ```
+
+1. Test the resolution with dig
+    ```
+    dig dev-mydomain.com NS
+    ...
+    ;; ANSWER SECTION:
+    dev-mydomain.com. 300 IN NS ns-1234.awsdns-56.org.
+    dev-mydomain.com. 300 IN NS ns-789.awsdns-01.com.
+    dev-mydomain.com. 300 IN NS ns-2345.awsdns-67.co.uk.
+    dev-mydomain.com. 300 IN NS ns-890.awsdns-12.net.
+    ...
+    ```
 
 
 ### 3. Deploy to stages through pipeline
@@ -59,3 +81,8 @@ npm run cdk deploy DevStageDnsStack --  --profile dev
 ```
 npm run cdk deploy DNSInfrastructurePipelineStack --  --profile mvpv3-cicd
 ```
+
+
+### 4. Delegate those domain to route53
+
+Go to your DNS provider and copy the NS records available eith
